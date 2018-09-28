@@ -14,4 +14,7 @@ router.route('/posts').post(PostController.addPost);
 // Delete a post by cuid
 router.route('/posts/:cuid').delete(PostController.deletePost);
 
+// Get all Comments
+router.route('/posts/:cuid/comments').get(PostController.getComments);
+
 export default router;

@@ -78,3 +78,26 @@ export function deletePost(req, res) {
     });
   });
 }
+
+/**
+ * Get all commetns
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function getComments(req, res) {
+  Post.findById(req.params.cuid)
+    .then((post) => {
+      if (post != null) {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(post.comments);
+      }
+      else {
+        err = new Error('Dish ' + req.params.cuid + ' not found');
+        err.status = 404;
+        return next(err);
+      }
+    }, (err) => next(err))
+    .catch((err) => next(err));
+}
