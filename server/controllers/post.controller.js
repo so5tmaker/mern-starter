@@ -178,7 +178,11 @@ export function putComment(req, res) {
     }
     if (post != null && post.comments.id(req.params.comid) != null) {
       if (req.body.comment) {
-        post.comments.id(req.params.comid).comment = req.body.comment;
+        const newComment = new Comment(req.body.comment);
+
+        post.comments.id(req.params.comid).remove();
+
+        post.comments.push(newComment);
       }
       post.save((_err, saved) => {
         if (_err) {
