@@ -155,7 +155,7 @@ export function deleteComment(req, res) {
     if (err) {
       res.status(500).send(err);
     }
-    dish.comments.id(req.params.comid).remove();
+    post.comments.id(req.params.comid).remove();
     post.save((_err, saved) => {
       if (_err) {
         res.status(500).send(_err);
@@ -164,3 +164,29 @@ export function deleteComment(req, res) {
     });
   });
 }
+
+/**
+ * Delete a post
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function putComment(req, res) {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    if (post != null && post.comments.id(req.params.comid) != null) {
+      if (req.body.comment) {
+        post.comments.id(req.params.comid).comment = req.body.comment;
+      }
+      post.save((_err, saved) => {
+        if (_err) {
+          res.status(500).send(_err);
+        }
+        res.json({ post: saved });
+      });
+    }
+  });
+}
+
