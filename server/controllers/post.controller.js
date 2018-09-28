@@ -1,4 +1,5 @@
 import Post from '../models/post';
+import Comment from '../models/comment';
 import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
@@ -80,6 +81,40 @@ export function deletePost(req, res) {
 }
 
 /**
+ * Save a post
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function addComment(req, res) {
+  if (!req.body.comment.comment || !req.body.comment.author) {
+    res.status(403).end();
+  }
+
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+
+    const newComment = new Comment(req.body.comment);
+
+    // Let's sanitize inputs
+    newComment.author = sanitizeHtml(newComment.author);
+    newComment.comment = sanitizeHtml(newComment.comment);
+    newComment.comid = cuid();
+
+    post.comments.push(newComment);
+
+    post.save((_err, saved) => {
+      if (_err) {
+        res.status(500).send(_err);
+      }
+      res.json({ post: saved });
+    });
+  });
+}
+
+/**
  * Get all commetns
  * @param req
  * @param res
@@ -108,3 +143,4 @@ export function getComment(req, res) {
     res.json({ comment: post.comments.filter(comments => comments.comid === req.params.comid)[0] });
   });
 }
+

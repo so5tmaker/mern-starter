@@ -1,18 +1,6 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-
-const commentSchema = new Schema({
-  comment: {
-    type: String,
-    required: true
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  comid: { type: 'String', required: true },
-  dateAdded: { type: 'Date', default: Date.now, required: true },
-});
+import commentSchema from './comment';
 
 const postSchema = new Schema({
   name: { type: 'String', required: true },
@@ -21,7 +9,7 @@ const postSchema = new Schema({
   slug: { type: 'String', required: true },
   cuid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true },
-  comments: [commentSchema]
+  comments: [commentSchema],
 });
 
 export default mongoose.model('Post', postSchema);
