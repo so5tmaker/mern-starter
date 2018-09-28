@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-import commentSchema from './comment';
+import { commentSchema } from './comment';
 
 const postSchema = new Schema({
   name: { type: 'String', required: true },

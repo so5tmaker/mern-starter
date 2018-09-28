@@ -20,7 +20,10 @@ router.route('/posts/:cuid/comments').get(PostController.getComments);
 // Add a new Comment
 router.route('/posts/:cuid/comments/').post(PostController.addComment);
 
-// Get one Comment by cuid
+// Get one comment by cuid
 router.route('/posts/:cuid/comments/:comid').get(PostController.getComment);
+
+// Delete a comment by cuid
+router.route('/posts/:cuid/comments/:comid').delete(PostController.deleteComment);
 
 export default router;

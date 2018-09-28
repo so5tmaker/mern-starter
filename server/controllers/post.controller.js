@@ -144,3 +144,23 @@ export function getComment(req, res) {
   });
 }
 
+/**
+ * Delete a post
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function deleteComment(req, res) {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    dish.comments.id(req.params.comid).remove();
+    post.save((_err, saved) => {
+      if (_err) {
+        res.status(500).send(_err);
+      }
+      res.json({ post: saved });
+    });
+  });
+}
