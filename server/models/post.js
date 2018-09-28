@@ -10,6 +10,7 @@ const commentSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  comid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 

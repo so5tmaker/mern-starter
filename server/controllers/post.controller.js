@@ -86,18 +86,25 @@ export function deletePost(req, res) {
  * @returns void
  */
 export function getComments(req, res) {
-  Post.findById(req.params.cuid)
-    .then((post) => {
-      if (post != null) {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(post.comments);
-      }
-      else {
-        err = new Error('Dish ' + req.params.cuid + ' not found');
-        err.status = 404;
-        return next(err);
-      }
-    }, (err) => next(err))
-    .catch((err) => next(err));
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.json({ comments: post.comments });
+  });
+}
+
+/**
+ * Get a single comment
+ * @param req
+ * @param res
+ * @returns void
+ */
+export function getComment(req, res) {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.json({ comment: post.comments.filter(comments => comments.comid === req.params.comid)[0] });
+  });
 }
