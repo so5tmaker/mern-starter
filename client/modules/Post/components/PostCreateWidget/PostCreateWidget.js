@@ -17,11 +17,11 @@ export class PostCreateWidget extends Component {
   };
 
   render() {
-    const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : '')}`;
+    const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : styles.appear)}`;
     return (
       <div className={cls}>
         <div className={styles['form-content']}>
-          <h2 className={styles['form-title']}><FormattedMessage id="createNewPost" /></h2>
+          <h2 className={styles['form-title']}><FormattedMessage id="createNewComment" /></h2>
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
           <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />

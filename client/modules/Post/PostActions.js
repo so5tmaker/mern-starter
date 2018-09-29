@@ -118,6 +118,6 @@ export function deleteCommentRequest(cuid, comid) {
 
 export function editCommentRequest(cuid, comid) {
   return (dispatch) => {
-    return callApi(`posts/${cuid}/comments/${comid}`, 'put').then(() => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
+    return callApi(`posts/${cuid}/comments/${comid}`, 'put').then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
   };
 }
