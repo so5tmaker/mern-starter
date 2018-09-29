@@ -8,7 +8,6 @@ export const DELETE_POST = 'DELETE_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const ADD_COMMENTS = 'ADD_COMMENTS';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
-export const EDIT_COMMENT = 'EDIT_COMMENT';
 
 // Export Actions
 export function addPost(post) {
@@ -79,7 +78,7 @@ export function addCommentRequest(comment, cuid, comid) {
         author: comment.name,
         comment: comment.comment,
       },
-    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === req.params.comid)[0])));
+    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
   };
 }
 
@@ -90,7 +89,7 @@ export function addComments(comments) {
   };
 }
 
-export function fetchComments() {
+export function fetchComments(cuid) {
   return (dispatch) => {
     return callApi(`posts/${cuid}/comments`).then(res => {
       dispatch(addPosts(res.comments));
@@ -104,30 +103,21 @@ export function fetchComment(cuid, comid) {
   };
 }
 
-export function deleteComment(cuid, comid) {
+export function deleteComment(comid) {
   return {
     type: DELETE_COMMENT,
-    cuid,
     comid,
   };
 }
 
 export function deleteCommentRequest(cuid, comid) {
   return (dispatch) => {
-    return callApi(`posts/${cuid}/comments/${comid}`, 'delete').then(() => dispatch(deleteComment(cuid, comid)));
-  };
-}
-
-export function editComment(cuid, comid) {
-  return {
-    type: EDIT_COMMENT,
-    cuid,
-    comid,
+    return callApi(`posts/${cuid}/comments/${comid}`, 'delete').then(() => dispatch(deleteComment(comid)));
   };
 }
 
 export function editCommentRequest(cuid, comid) {
   return (dispatch) => {
-    return callApi(`posts/${cuid}/comments/${comid}`, 'put').then(() => dispatch(editComment(cuid, comid)));
+    return callApi(`posts/${cuid}/comments/${comid}`, 'put').then(() => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
   };
 }
