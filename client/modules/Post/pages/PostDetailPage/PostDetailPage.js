@@ -3,15 +3,25 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
+import cuid from 'cuid';
 
 // Import Style
 import styles from '../../components/PostListItem/PostListItem.css';
 
+// Import Components
+import CommentCreateWidget from '../../components/PostCreateWidget/CommentCreateWidget';
+
 // Import Actions
-import { fetchPost } from '../../PostActions';
+import { addCommentRequest, fetchPost } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
+import { getComments } from '../../CommentReducer';
+
+function handleAddComment(author, comment) {
+  let comid = cuid();
+  props.dispatch(addCommentRequest({ author, comment }, params.cuid, comid));
+};
 
 export function PostDetailPage(props) {
   return (
@@ -22,6 +32,7 @@ export function PostDetailPage(props) {
         <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
         <p className={styles['post-desc']}>{props.post.content}</p>
       </div>
+      <CommentCreateWidget addComment={handleAddComment} />
     </div>
   );
 }
@@ -35,6 +46,7 @@ PostDetailPage.need = [params => {
 function mapStateToProps(state, props) {
   return {
     post: getPost(state, props.params.cuid),
+    comments: getComments(state),
   };
 }
 

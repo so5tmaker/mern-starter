@@ -101,7 +101,6 @@ export function addComment(req, res) {
     // Let's sanitize inputs
     newComment.author = sanitizeHtml(newComment.author);
     newComment.comment = sanitizeHtml(newComment.comment);
-    newComment.comid = cuid();
 
     post.comments.push(newComment);
 

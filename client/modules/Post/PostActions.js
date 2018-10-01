@@ -73,12 +73,13 @@ export function addComment(comment) {
 
 export function addCommentRequest(comment, cuid, comid) {
   return (dispatch) => {
-    return callApi(`posts/${cuid}/comments/${comid}`, 'post', {
+    return callApi(`posts/${cuid}/comments`, 'post', {
       comment: {
         author: comment.name,
         comment: comment.comment,
+        comid: comid,
       },
-    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
+    }).then(res => dispatch(addComment(res.comments.filter(comments => comments.comid === comid)[0])));
   };
 }
 
@@ -92,7 +93,7 @@ export function addComments(comments) {
 export function fetchComments(cuid) {
   return (dispatch) => {
     return callApi(`posts/${cuid}/comments`).then(res => {
-      dispatch(addPosts(res.comments));
+      dispatch(addComments(res.comments));
     });
   };
 }
