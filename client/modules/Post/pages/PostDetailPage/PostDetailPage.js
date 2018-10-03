@@ -20,7 +20,7 @@ import { getComments } from '../../CommentReducer';
 
 class PostDetailPage extends Component {
   componentDidMount() {
-   //this.props.dispatch(fetchPost(params.cuid));
+    // this.props.dispatch(fetchPost(params.cuid));
   }
 
   handleAddComment(props, author, comment) {
@@ -44,7 +44,7 @@ class PostDetailPage extends Component {
           <p className={styles['post-desc']}>{this.props.post.content}</p>
         </div>
         <CommentList handleDeleteComment={this.handleDeleteComment} props={this.props} />
-        <CommentCreateWidget addComment={this.handleAddComment} props={this.props}/>
+        <CommentCreateWidget addComment={this.handleAddComment} props={this.props} />
       </div>
     );
   }

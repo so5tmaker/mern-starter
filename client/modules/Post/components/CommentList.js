@@ -5,24 +5,25 @@ import PropTypes from 'prop-types';
 import CommentListItem from './PostListItem/CommentListItem';
 
 function CommentList(props) {
-  let comments = props.props.post.comments;
-  if (comments) {
-    return (
-      <div className="listView">
-        {
-          comments.map(comment => (
-            <CommentListItem
-              comment={comment}
-              key={comment.comid}
-              onDelete={() => props.handleDeleteComment(props.props, comment.comid)}
-            />
-          ))
-        }
-      </div>
-    );
-  } else {
-    return (<div className="listView"></div>);
-  }
+  const newProps = props.props;
+  const comments = newProps.post.comments;
+  // if (comments) {
+  return (
+    <div className="listView">
+      {
+        comments.map(comment => (
+          <CommentListItem
+            comment={comment}
+            key={comment.comid}
+            onDelete={() => props.handleDeleteComment(newProps, comment.comid)}
+          />
+        ))
+      }
+    </div>
+  );
+  // } else {
+  // return (<div className="listView"></div>);
+  // }
 }
 
 CommentList.propTypes = {

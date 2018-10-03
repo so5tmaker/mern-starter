@@ -160,13 +160,12 @@ export function deleteComment(req, res) {
     if (errFind) {
       res.status(500).send(errFind);
     }
-    let list = post.comments;
-    for (let i = list.length - 1; i--;) {
+    const list = post.comments;
+    for (let i = list.length; i--;) {
       if (list[i].comid === req.params.comid) {
         list.splice(i, 1);
       }
     }
-    console.log('list', list);
     post.save((err, saved) => {
       if (err) {
         res.status(500).send(err);
