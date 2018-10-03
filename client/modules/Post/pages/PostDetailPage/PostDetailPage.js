@@ -1,40 +1,53 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import cuid from 'cuid';
 
 // Import Style
 import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Components
 import CommentCreateWidget from '../../components/PostCreateWidget/CommentCreateWidget';
+import CommentList from '../../components/CommentList';
 
 // Import Actions
-import { addCommentRequest, fetchPost } from '../../PostActions';
+import { addCommentRequest, deleteCommentRequest, fetchPost } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
 import { getComments } from '../../CommentReducer';
 
-function handleAddComment(author, comment) {
-  let comid = cuid();
-  props.dispatch(addCommentRequest({ author, comment }, params.cuid, comid));
-};
+class PostDetailPage extends Component {
+  componentDidMount() {
+   //this.props.dispatch(fetchPost(params.cuid));
+  }
 
-export function PostDetailPage(props) {
-  return (
-    <div>
-      <Helmet title={props.post.title} />
-      <div className={`${styles['single-post']} ${styles['post-detail']}`}>
-        <h3 className={styles['post-title']}>{props.post.title}</h3>
-        <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
-        <p className={styles['post-desc']}>{props.post.content}</p>
+  handleAddComment(props, author, comment) {
+    const self = props.props;
+    self.dispatch(addCommentRequest({ author, comment }, self.post.cuid));
+  }
+
+  handleDeleteComment(props, comid) {
+    if (confirm('Do you want to delete this comment?')) { // eslint-disable-line
+      props.dispatch(deleteCommentRequest(props.params.cuid, comid));
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <Helmet title={this.props.post.title} />
+        <div className={`${styles['single-post']} ${styles['post-detail']}`}>
+          <h3 className={styles['post-title']}>{this.props.post.title}</h3>
+          <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
+          <p className={styles['post-desc']}>{this.props.post.content}</p>
+        </div>
+        <CommentList handleDeleteComment={this.handleDeleteComment} props={this.props} />
+        <CommentCreateWidget addComment={this.handleAddComment} props={this.props}/>
       </div>
-      <CommentCreateWidget addComment={handleAddComment} />
-    </div>
-  );
+    );
+  }
 }
 
 // Actions required to provide data for this component to render in server side.
@@ -58,6 +71,11 @@ PostDetailPage.propTypes = {
     slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+PostDetailPage.contextTypes = {
+  router: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(PostDetailPage);

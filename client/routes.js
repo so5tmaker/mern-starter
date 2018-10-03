@@ -31,7 +31,7 @@ export default (
         });
       }}
     />
-    <Route
+    <Route 
       path="/posts/:slug-:cuid"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {

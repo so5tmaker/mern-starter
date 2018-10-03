@@ -10,13 +10,13 @@ export class CommentCreateWidget extends Component {
     const authorRef = this.refs.author;
     const commentRef = this.refs.comment;
     if (authorRef.value && commentRef.value) {
-      this.props.addComment(authorRef.value, commentRef.value);
+      this.props.addComment(this.props, authorRef.value, commentRef.value);
       authorRef.value = commentRef.value = '';
     }
   };
 
   render() {
-    const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : styles.appear)}`;
+    const cls = `${styles.form} ${styles.appear}`;
     return (
       <div className={cls}>
         <div className={styles['form-content']}>

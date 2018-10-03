@@ -7,8 +7,8 @@ export const commentSchema = new Schema({
     required: true,
   },
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
+    required: true,
   },
   comid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true },

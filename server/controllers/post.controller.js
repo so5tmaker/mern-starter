@@ -91,9 +91,11 @@ export function addComment(req, res) {
     res.status(403).end();
   }
 
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if (err) {
-      res.status(500).send(err);
+  console.log('req.params.cuid', req.params.cuid);
+
+  Post.findOne({ cuid: req.params.cuid }).exec((errFind, post) => {
+    if (errFind) {
+      res.status(500).send(errFind);
     }
 
     const newComment = new Comment(req.body.comment);
@@ -101,12 +103,16 @@ export function addComment(req, res) {
     // Let's sanitize inputs
     newComment.author = sanitizeHtml(newComment.author);
     newComment.comment = sanitizeHtml(newComment.comment);
+    newComment.comid = cuid();
 
     post.comments.push(newComment);
 
-    post.save((_err, saved) => {
-      if (_err) {
-        res.status(500).send(_err);
+    console.log('post.comments', post.comments);
+
+    post.save((err, saved) => {
+      console.log('post.save: err', err);
+      if (err) {
+        res.status(500).send(err);
       }
       res.json({ post: saved });
     });
@@ -150,14 +156,20 @@ export function getComment(req, res) {
  * @returns void
  */
 export function deleteComment(req, res) {
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if (err) {
-      res.status(500).send(err);
+  Post.findOne({ cuid: req.params.cuid }).exec((errFind, post) => {
+    if (errFind) {
+      res.status(500).send(errFind);
     }
-    post.comments.id(req.params.comid).remove();
-    post.save((_err, saved) => {
-      if (_err) {
-        res.status(500).send(_err);
+    let list = post.comments;
+    for (let i = list.length - 1; i--;) {
+      if (list[i].comid === req.params.comid) {
+        list.splice(i, 1);
+      }
+    }
+    console.log('list', list);
+    post.save((err, saved) => {
+      if (err) {
+        res.status(500).send(err);
       }
       res.json({ post: saved });
     });

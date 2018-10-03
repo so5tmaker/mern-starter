@@ -71,15 +71,14 @@ export function addComment(comment) {
   };
 }
 
-export function addCommentRequest(comment, cuid, comid) {
+export function addCommentRequest(comment, cuid) {
   return (dispatch) => {
     return callApi(`posts/${cuid}/comments`, 'post', {
       comment: {
-        author: comment.name,
+        author: comment.author,
         comment: comment.comment,
-        comid: comid,
       },
-    }).then(res => dispatch(addComment(res.comments.filter(comments => comments.comid === comid)[0])));
+    }).then(res => dispatch(addComment(res.post.comments[res.post.comments.length - 1])));
   };
 }
 
