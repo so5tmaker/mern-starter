@@ -9,16 +9,25 @@ import styles from '../../components/PostListItem/PostListItem.css';
 
 // Import Components
 import CommentCreateWidget from '../../components/PostCreateWidget/CommentCreateWidget';
+import CommentEditWidget from '../../components/PostCreateWidget/CommentEditWidget';
 import CommentList from '../../components/CommentList';
 
 // Import Actions
-import { addCommentRequest, deleteCommentRequest, fetchPost } from '../../PostActions';
+import { addCommentRequest, deleteCommentRequest, editCommentRequest, fetchPost } from '../../PostActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
 import { getComments } from '../../CommentReducer';
 
 class PostDetailPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      comment: [],
+    }
+  }
+
   componentDidMount() {
     // this.props.dispatch(fetchPost(params.cuid));
   }
@@ -34,6 +43,18 @@ class PostDetailPage extends Component {
     }
   }
 
+  handleEditComment(self, props, comment) {
+    self.setState({comment: comment});
+    console.log('this', self, self.state.comment);
+    //props.dispatch(editCommentRequest(props.post.cuid, comment));
+  }
+
+  handlePutComment(self, props, comment) {
+    //self.setState({comment: comment});
+    //console.log('this', self);
+    //props.dispatch(editCommentRequest(props.post.cuid, comment));
+  }
+
   render() {
     return (
       <div>
@@ -43,8 +64,19 @@ class PostDetailPage extends Component {
           <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
           <p className={styles['post-desc']}>{this.props.post.content}</p>
         </div>
-        <CommentList handleDeleteComment={this.handleDeleteComment} props={this.props} />
-        <CommentCreateWidget addComment={this.handleAddComment} props={this.props} />
+        <CommentList handleDeleteComment={this.handleDeleteComment}
+          handleEditComment={this.handleEditComment}
+          props={this.props}
+          self={this}
+        />
+        <CommentCreateWidget addComment={this.handleAddComment}
+          props={this.props}
+          comment={this.state.comment}
+        />
+        <CommentEditWidget editComment={this.handlePutComment}
+          props={this.props}
+          comment={this.state.comment}
+        />
       </div>
     );
   }

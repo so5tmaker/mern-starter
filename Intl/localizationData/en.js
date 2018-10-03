@@ -8,6 +8,7 @@ export default {
     by: 'By',
     deletePost: 'Delete Post',
     deleteComment: 'Delete Comment',
+    editComment: 'Edit Comment',
     createNewPost: 'Create new post',
     createNewComment: 'Create new comment',
     authorName: 'Author\'s Name',

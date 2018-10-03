@@ -13,6 +13,7 @@ function CommentListItem(props) {
       <p className={styles['author-name']}><FormattedMessage id="by" /> {props.comment.author}</p>
       <p className={styles['post-desc']}>{props.comment.comment}</p>
       <p className={styles['post-action']}><a href="#" onClick={props.onDelete}><FormattedMessage id="deleteComment" /></a></p>
+      <p className={styles['post-action']}><a href="#myForm" onClick={props.onEdit}><FormattedMessage id="editComment" /></a></p>
       <hr className={styles.divider} />
     </div>
   );

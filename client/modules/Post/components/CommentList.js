@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import CommentListItem from './PostListItem/CommentListItem';
 
 function CommentList(props) {
+  const self = props.self;
   const newProps = props.props;
   const comments = newProps.post.comments;
   // if (comments) {
@@ -16,6 +17,7 @@ function CommentList(props) {
             comment={comment}
             key={comment.comid}
             onDelete={() => props.handleDeleteComment(newProps, comment.comid)}
+            onEdit={() => props.handleEditComment(self, newProps, comment)}
           />
         ))
       }
@@ -27,12 +29,6 @@ function CommentList(props) {
 }
 
 CommentList.propTypes = {
-  comment: PropTypes.arrayOf(PropTypes.shape({
-    comid: PropTypes.string.isRequired,
-  })).isRequired,
-  post: PropTypes.arrayOf(PropTypes.shape({
-    cuid: PropTypes.string.isRequired,
-  })).isRequired,
   handleDeleteComment: PropTypes.func.isRequired,
 };
 
