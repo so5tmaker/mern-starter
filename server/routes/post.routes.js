@@ -14,4 +14,19 @@ router.route('/posts').post(PostController.addPost);
 // Delete a post by cuid
 router.route('/posts/:cuid').delete(PostController.deletePost);
 
+// Get all Comments
+router.route('/posts/:cuid/comments').get(PostController.getComments);
+
+// Add a new Comment
+router.route('/posts/:cuid/comments').post(PostController.addComment);
+
+// Get one comment by comid
+router.route('/posts/:cuid/comments/:comid').get(PostController.getComment);
+
+// Delete a comment by comid
+router.route('/posts/:cuid/comments/:comid').delete(PostController.deleteComment);
+
+// Put a comment by comid
+router.route('/posts/:cuid/comments/:comid').put(PostController.putComment);
+
 export default router;

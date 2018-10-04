@@ -5,6 +5,10 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
 
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const ADD_COMMENTS = 'ADD_COMMENTS';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
+
 // Export Actions
 export function addPost(post) {
   return {
@@ -56,5 +60,71 @@ export function deletePost(cuid) {
 export function deletePostRequest(cuid) {
   return (dispatch) => {
     return callApi(`posts/${cuid}`, 'delete').then(() => dispatch(deletePost(cuid)));
+  };
+}
+
+// Export Actions For Comments
+export function addComment(comment) {
+  return {
+    type: ADD_COMMENT,
+    comment,
+  };
+}
+
+export function addCommentRequest(comment, cuid) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments`, 'post', {
+      comment: {
+        author: comment.author,
+        comment: comment.comment,
+      },
+    }).then(res => dispatch(addComment(res.post.comments[res.post.comments.length - 1])));
+  };
+}
+
+export function addComments(comments) {
+  return {
+    type: ADD_COMMENTS,
+    comments,
+  };
+}
+
+export function fetchComments(cuid) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments`).then(res => {
+      dispatch(addComments(res.comments));
+    });
+  };
+}
+
+export function fetchComment(cuid, comid) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments/${comid}`).then(res => dispatch(addComment(res.comment)));
+  };
+}
+
+export function deleteComment(comid) {
+  return {
+    type: DELETE_COMMENT,
+    comid,
+  };
+}
+
+export function deleteCommentRequest(cuid, comid) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments/${comid}`, 'delete').then(() => dispatch(deleteComment(comid)));
+  };
+}
+
+export function editCommentRequest(cuid, comment) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments/${comment.comid}`, 'put', {
+      comment: {
+        author: comment.author,
+        comment: comment.comment,
+        comid: comment.comid,
+        dateAdded: comment.dateAdded,
+      },
+    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comment.comid)[0])));
   };
 }
