@@ -25,6 +25,7 @@ CommentListItem.propTypes = {
     comment: PropTypes.string.isRequired,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
 };
 
 export default CommentListItem;

@@ -14,10 +14,12 @@ import CommentList from '../../components/CommentList';
 
 // Import Actions
 import { addCommentRequest, deleteCommentRequest, editCommentRequest, fetchPost } from '../../PostActions';
+import { toggleEditPost } from '../../../App/AppActions';
 
 // Import Selectors
 import { getPost } from '../../PostReducer';
 import { getComments } from '../../CommentReducer';
+import { getShowEditPost } from '../../../App/AppReducer';
 
 class PostDetailPage extends Component {
 
@@ -25,7 +27,7 @@ class PostDetailPage extends Component {
     super(props);
     this.state = {
       comment: [],
-    }
+    };
   }
 
   componentDidMount() {
@@ -44,14 +46,19 @@ class PostDetailPage extends Component {
   }
 
   handleEditComment(self, props, comment) {
-    self.setState({comment: comment});
-    console.log('this', self, self.state.comment);
-    //props.dispatch(editCommentRequest(props.post.cuid, comment));
+    const _comment = comment;
+    self.setState({
+      comment: _comment,
+    });
+    this.props.dispatch(toggleEditPost());
+    // console.log('this', self, self.state.comment);
+    // props.dispatch(editCommentRequest(props.post.cuid, comment));
   }
 
   handlePutComment(self, props, comment) {
-    //self.setState({comment: comment});
-    //console.log('this', self);
+    this.props.dispatch(toggleEditPost());
+    // self.setState({comment: comment});
+    // console.log('this', self);
     //props.dispatch(editCommentRequest(props.post.cuid, comment));
   }
 
@@ -64,18 +71,23 @@ class PostDetailPage extends Component {
           <p className={styles['author-name']}><FormattedMessage id="by" /> {this.props.post.name}</p>
           <p className={styles['post-desc']}>{this.props.post.content}</p>
         </div>
-        <CommentList handleDeleteComment={this.handleDeleteComment}
+        <CommentList
+          handleDeleteComment={this.handleDeleteComment}
           handleEditComment={this.handleEditComment}
           props={this.props}
           self={this}
         />
-        <CommentCreateWidget addComment={this.handleAddComment}
+        <CommentCreateWidget
+          addComment={this.handleAddComment}
           props={this.props}
           comment={this.state.comment}
+          showEditPost={this.props.showEditPost}
         />
-        <CommentEditWidget editComment={this.handlePutComment}
+        <CommentEditWidget
+          editComment={this.handlePutComment}
           props={this.props}
           comment={this.state.comment}
+          showEditPost={this.props.showEditPost}
         />
       </div>
     );
@@ -92,6 +104,7 @@ function mapStateToProps(state, props) {
   return {
     post: getPost(state, props.params.cuid),
     comments: getComments(state),
+    showEditPost: getShowEditPost(state),
   };
 }
 
@@ -103,6 +116,7 @@ PostDetailPage.propTypes = {
     slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
   }).isRequired,
+  showEditPost: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

@@ -30,6 +30,7 @@ function CommentList(props) {
 
 CommentList.propTypes = {
   handleDeleteComment: PropTypes.func.isRequired,
+  handleEditComment: PropTypes.func.isRequired,
 };
 
 export default CommentList;

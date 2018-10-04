@@ -10,20 +10,17 @@ export class CommentEditWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: this.props.comment,
+      comment: {},
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
-  editComment = () => {
-    const authorRef = this.refs.author;
-    const commentRef = this.refs.comment;
-    if (authorRef.value && commentRef.value) {
-      this.props.editComment(this.props, authorRef.value, commentRef.value);
-      authorRef.value = commentRef.value = '';
-    }
-  };
+  componentWillReceiveProps() {
+    this.setState({
+      comment: this.props.comment,
+    });
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -33,14 +30,6 @@ export class CommentEditWidget extends Component {
     if (author && comment) {
       this.props.editComment(this.props, author, comment);
     }
-
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      comment: this.props.comment,
-    });
-    console.log('componentWillReceiveProps nextProps', nextProps);
   }
 
   onChange = (e) => {
@@ -49,18 +38,30 @@ export class CommentEditWidget extends Component {
     this.setState({ comment: state });
   }
 
+  editComment = () => {
+    const authorRef = this.refs.author;
+    const commentRef = this.refs.comment;
+    if (authorRef.value && commentRef.value) {
+      this.props.editComment(this.props, authorRef.value, commentRef.value);
+      authorRef.value = commentRef.value = '';
+    }
+  }
+
   render() {
-    const cls = `${styles.form} ${styles.appear}`;
+    const cls = `${styles.form} ${(this.props.showEditPost ? styles.appear : '')}`;
+    // const cls = `${styles.form} ${styles.appear}`;
     return (
-      <div className={cls} id='myForm'>
+      <div className={cls} id="myForm">
         <div className={styles['form-content']}>
           <h2 className={styles['form-title']}><FormattedMessage id="editComment" /></h2>
           <form onSubmit={this.onSubmit}>
-            <input placeholder={this.props.intl.messages.authorName}
+            <input
+              placeholder={this.props.intl.messages.authorName}
               name="author" value={this.state.comment.author} onChange={this.onChange}
               className={styles['form-field']} ref="author"
             />
-            <textarea placeholder={this.props.intl.messages.commentContent}
+            <textarea
+              placeholder={this.props.intl.messages.commentContent}
               name="comment" value={this.state.comment.comment} onChange={this.onChange}
               className={styles['form-field']} ref="comment"
             />
@@ -74,6 +75,10 @@ export class CommentEditWidget extends Component {
 
 CommentEditWidget.propTypes = {
   editComment: PropTypes.func.isRequired,
+  comment: PropTypes.shape({
+    author: PropTypes.string.isRequired,
+    comment: PropTypes.string.isRequired,
+  }).isRequired,
   intl: intlShape.isRequired,
 };
 
