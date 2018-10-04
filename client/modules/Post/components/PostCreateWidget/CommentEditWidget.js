@@ -24,11 +24,12 @@ export class CommentEditWidget extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
-    const { author, comment } = this.state.comment;
-
-    if (author && comment) {
-      this.props.editComment(this.props, author, comment);
+    console.log('this.props', this.props);
+    const authorRef = this.refs.author;
+    const commentRef = this.refs.comment;
+    if (authorRef.value && commentRef.value) {
+      this.props.editComment(this.props);
+      authorRef.value = commentRef.value = '';
     }
   }
 
@@ -38,18 +39,8 @@ export class CommentEditWidget extends Component {
     this.setState({ comment: state });
   }
 
-  editComment = () => {
-    const authorRef = this.refs.author;
-    const commentRef = this.refs.comment;
-    if (authorRef.value && commentRef.value) {
-      this.props.editComment(this.props, authorRef.value, commentRef.value);
-      authorRef.value = commentRef.value = '';
-    }
-  }
-
   render() {
     const cls = `${styles.form} ${(this.props.showEditPost ? styles.appear : '')}`;
-    // const cls = `${styles.form} ${styles.appear}`;
     return (
       <div className={cls} id="myForm">
         <div className={styles['form-content']}>
@@ -75,10 +66,12 @@ export class CommentEditWidget extends Component {
 
 CommentEditWidget.propTypes = {
   editComment: PropTypes.func.isRequired,
-  comment: PropTypes.shape({
+  comment: PropTypes.arrayOf(PropTypes.shape({
     author: PropTypes.string.isRequired,
     comment: PropTypes.string.isRequired,
-  }).isRequired,
+    comid: PropTypes.string.isRequired,
+  })).isRequired,
+  showEditPost: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
 };
 

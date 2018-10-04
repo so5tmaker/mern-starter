@@ -45,21 +45,17 @@ class PostDetailPage extends Component {
     }
   }
 
-  handleEditComment(self, props, comment) {
+  handleEditComment(self, comment) {
     const _comment = comment;
     self.setState({
       comment: _comment,
     });
     this.props.dispatch(toggleEditPost());
-    // console.log('this', self, self.state.comment);
-    // props.dispatch(editCommentRequest(props.post.cuid, comment));
   }
 
-  handlePutComment(self, props, comment) {
+  handlePutComment(self) {
     this.props.dispatch(toggleEditPost());
-    // self.setState({comment: comment});
-    // console.log('this', self);
-    //props.dispatch(editCommentRequest(props.post.cuid, comment));
+    this.props.dispatch(editCommentRequest(this.props.params.cuid, self.comment));
   }
 
   render() {

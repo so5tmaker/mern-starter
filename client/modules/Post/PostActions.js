@@ -117,13 +117,14 @@ export function deleteCommentRequest(cuid, comid) {
 }
 
 export function editCommentRequest(cuid, comment) {
-  console.log('cuid, comment', cuid, comment);
-  // return (dispatch) => {
-  //   return callApi(`posts/${cuid}/comments/${comid}`, 'put', {
-  //     comment: {
-  //       author: comment.author,
-  //       comment: comment.comment,
-  //     },
-  //   }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
-  // };
+  return (dispatch) => {
+    return callApi(`posts/${cuid}/comments/${comment.comid}`, 'put', {
+      comment: {
+        author: comment.author,
+        comment: comment.comment,
+        comid: comment.comid,
+        dateAdded: comment.dateAdded,
+      },
+    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
+  };
 }

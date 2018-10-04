@@ -145,7 +145,7 @@ export function getComment(req, res) {
 }
 
 /**
- * Delete a post
+ * Delete a comment
  * @param req
  * @param res
  * @returns void
@@ -171,7 +171,7 @@ export function deleteComment(req, res) {
 }
 
 /**
- * Delete a post
+ * Edit a comment
  * @param req
  * @param res
  * @returns void
@@ -181,20 +181,27 @@ export function putComment(req, res) {
     if (errFind) {
       res.status(500).send(errFind);
     }
-    if (post != null && post.comments.id(req.params.comid) != null) {
+
+    if (post != null) {
       if (req.body.comment) {
         const newComment = new Comment(req.body.comment);
-
-        post.comments.id(req.params.comid).remove();
-
-        post.comments.push(newComment);
-      }
-      post.save((err, saved) => {
-        if (err) {
-          res.status(500).send(err);
+        const list = post.comments;
+        for (let i = list.length; i--;) {
+          if (list[i].comid === req.params.comid) {
+            list.splice(i, 1);
+            list.splice(i, 0, newComment);
+            break;
+          }
         }
-        res.json({ post: saved });
-      });
+        console.log('list', list);
+        post.save((err, saved) => {
+          console.log('err', err);
+          if (err) {
+            res.status(500).send(err);
+          }
+          res.json({ post: saved });
+        });
+      }
     }
   });
 }

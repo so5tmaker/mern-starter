@@ -17,7 +17,7 @@ function CommentList(props) {
             comment={comment}
             key={comment.comid}
             onDelete={() => props.handleDeleteComment(newProps, comment.comid)}
-            onEdit={() => props.handleEditComment(self, newProps, comment)}
+            onEdit={() => props.handleEditComment(self, comment)}
           />
         ))
       }

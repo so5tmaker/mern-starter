@@ -40,6 +40,7 @@ export class CommentCreateWidget extends Component {
 
 CommentCreateWidget.propTypes = {
   addComment: PropTypes.func.isRequired,
+  showEditPost: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
 };
 
