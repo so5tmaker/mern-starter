@@ -125,6 +125,6 @@ export function editCommentRequest(cuid, comment) {
         comid: comment.comid,
         dateAdded: comment.dateAdded,
       },
-    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comid)[0])));
+    }).then(res => dispatch(addComment(res.post.comments.filter(comments => comments.comid === comment.comid)[0])));
   };
 }

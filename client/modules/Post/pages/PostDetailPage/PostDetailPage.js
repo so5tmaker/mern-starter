@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
+import equal from 'fast-deep-equal';
 
 // Import Style
 import styles from '../../components/PostListItem/PostListItem.css';
@@ -13,7 +14,7 @@ import CommentEditWidget from '../../components/PostCreateWidget/CommentEditWidg
 import CommentList from '../../components/CommentList';
 
 // Import Actions
-import { addCommentRequest, deleteCommentRequest, editCommentRequest, fetchPost } from '../../PostActions';
+import { addCommentRequest, deleteCommentRequest, editCommentRequest, fetchPost, fetchComments } from '../../PostActions';
 import { toggleEditPost } from '../../../App/AppActions';
 
 // Import Selectors
@@ -27,11 +28,42 @@ class PostDetailPage extends Component {
     super(props);
     this.state = {
       comment: [],
+      comments: [],
     };
+    this.updateComments = this.updateComments.bind(this);
+    this.updateComment = this.updateComment.bind(this);
   }
 
   componentDidMount() {
-    // this.props.dispatch(fetchPost(params.cuid));
+    this.updateComments();
+    this.updateComment(this, this.state.comment);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!equal(this.props.comments, prevProps.comments)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {
+      this.updateComments();
+    }
+    if (!equal(this.props.comment, prevProps.comment)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {
+      this.updateComment(this, prevProps.comment);
+    }
+  }
+
+  updateComments() {
+    this.props.dispatch(fetchComments(this.props.post.cuid));
+    this.setState({
+      comments: this.props.comments,
+    });
+  }
+
+  updateComment(self, comment) {
+    const _comment = comment;
+    if (_comment) {
+      self.setState({
+        comment: _comment,
+      });
+    }
   }
 
   handleAddComment(props, author, comment) {
@@ -47,15 +79,17 @@ class PostDetailPage extends Component {
 
   handleEditComment(self, comment) {
     const _comment = comment;
-    self.setState({
-      comment: _comment,
-    });
+    if (_comment) {
+      self.setState({
+        comment: _comment,
+      });
+    }
     this.props.dispatch(toggleEditPost());
   }
 
   handlePutComment(self) {
     this.props.dispatch(toggleEditPost());
-    this.props.dispatch(editCommentRequest(this.props.params.cuid, self.comment));
+    this.props.dispatch(editCommentRequest(self.props.params.cuid, self.comment));
   }
 
   render() {
@@ -72,6 +106,7 @@ class PostDetailPage extends Component {
           handleEditComment={this.handleEditComment}
           props={this.props}
           self={this}
+          comments={this.state.comments}
         />
         <CommentCreateWidget
           addComment={this.handleAddComment}
@@ -94,6 +129,9 @@ class PostDetailPage extends Component {
 PostDetailPage.need = [params => {
   return fetchPost(params.cuid);
 }];
+
+// Actions required to provide data for this component to render in sever side.
+// PostDetailPage.need = [() => { return fetchComments(); }];
 
 // Retrieve data from store as props
 function mapStateToProps(state, props) {

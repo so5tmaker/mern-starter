@@ -28,8 +28,9 @@ export class CommentEditWidget extends Component {
     const authorRef = this.refs.author;
     const commentRef = this.refs.comment;
     if (authorRef.value && commentRef.value) {
-      this.props.editComment(this.props);
       authorRef.value = commentRef.value = '';
+      this.setState({ comment: {} });
+      this.props.editComment(this.props);
     }
   }
 

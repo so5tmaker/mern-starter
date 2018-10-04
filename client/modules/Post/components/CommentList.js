@@ -7,7 +7,7 @@ import CommentListItem from './PostListItem/CommentListItem';
 function CommentList(props) {
   const self = props.self;
   const newProps = props.props;
-  const comments = newProps.post.comments;
+  const comments = props.comments;
   // if (comments) {
   return (
     <div className="listView">

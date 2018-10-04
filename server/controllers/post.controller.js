@@ -193,9 +193,7 @@ export function putComment(req, res) {
             break;
           }
         }
-        console.log('list', list);
         post.save((err, saved) => {
-          console.log('err', err);
           if (err) {
             res.status(500).send(err);
           }
